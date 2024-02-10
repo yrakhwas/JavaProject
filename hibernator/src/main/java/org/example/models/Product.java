@@ -24,6 +24,9 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @Lob
+    @Column(name="photo")
+    private byte[] photo;
     @Override
     public String toString() {
         return "Product{" +

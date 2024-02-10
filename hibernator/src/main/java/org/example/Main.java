@@ -5,7 +5,12 @@ import org.example.models.Category;
 import org.example.models.Product;
 import org.example.utils.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.cfg.VerifyFetchProfileReferenceSecondPass;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +23,7 @@ public class Main {
         //addProduct();
         //editCategory();
         //editProduct();
+        addProduct();
     }
     public static void getList()
     {
@@ -79,9 +85,16 @@ public class Main {
             System.out.println("Tape price : ");
             product.setPrice(scanner.nextDouble());
 
+            scanner.nextLine();
+
             Category category = new Category();
             System.out.println("Enter category id :");
             category.setId(scanner.nextInt());
+
+            System.out.println("Enter path to the photo :");
+            String photoPath = scanner.nextLine();
+            byte[]photo = loadPhoto(photoPath);
+            product.setPhoto(photo);
 
             product.setCategory(category);
             context.save(product);
@@ -154,6 +167,19 @@ public class Main {
             System.out.println("Product was updated successfully");
         } catch (Exception ex) {
             System.out.println("Error : " + ex.getMessage());
+        }
+    }
+    private static byte[] loadPhoto(String photoPath)
+    {
+        try
+        {
+            Path path = Paths.get(photoPath);
+            return Files.readAllBytes(path);
+        }
+        catch(IOException ex)
+        {
+            System.out.println("Error loading photo : " + ex.getMessage());
+            return null;
         }
     }
 }
