@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,6 +44,17 @@ public class CategoryController {
         else
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable int categoryId){
+        if(categoryRepository.existsById(categoryId)){
+            categoryRepository.deleteById(categoryId);
+            return ResponseEntity.noContent().build();
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
         }
     }
 }
